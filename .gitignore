@@ -1,0 +1,7 @@
+slurm_spool/slurmd/*
+slurm_spool/slurmctld/*
+slurm_logs/*
+jupyter_notebooks/*
+
+jupyter_config/jupyterhub_cookie_secret
+jupyter_config/jupyterhub.sqlite
