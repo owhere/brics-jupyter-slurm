@@ -1,9 +1,11 @@
 #! /bin/bash
 
 
-docker run -d --name slurm-jupyter \
+docker run --name slurm-jupyter \
     --privileged \
-    -p 6817:6817 -p 6818:6818 -p 38024:38024  \
+    -p 6817:6817 -p 6818:6818 \
+    -p 38024:38024   \
+    -p 8888:8888 \
     --user root \
     --mount type=bind,source=$PWD/slurm_logs,target=/srv/slurm_logs \
     --mount type=bind,source=$PWD/slurm_config/slurm.conf,target=/etc/slurm/slurm.conf \
