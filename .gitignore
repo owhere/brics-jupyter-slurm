@@ -1,7 +1,14 @@
 slurm_spool/slurmd/*
+!slurm_spool/slurmd/.gitkeep
+
 slurm_spool/slurmctld/*
+!slurm_spool/slurmctld/.gitkeep
+
 slurm_logs/*
+!slurm_logs/.gitkeep
+
 jupyter_notebooks/*
+!jupyter_notebooks/.gitkeep
 
 jupyter_config/jupyterhub_cookie_secret
 jupyter_config/jupyterhub.sqlite
