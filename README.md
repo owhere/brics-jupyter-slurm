@@ -8,6 +8,8 @@ This repo runs JupyterHub in a docker, which installs Slurm and JupyterHub. The 
 - **use different authenticator and spawner by using different JupyterHub config files.**
 - **mount all folders and files when run the container.**
 
+## Design
+
 ### 1. Base image 
 
 Star with a working Slurm docker as a base image, such as [Docker-Slurm](https://github.com/owhere/docker-slurm).
@@ -65,7 +67,6 @@ This user should be the owner to run JupyterHub and Slurm Service
     sudo chown -R admin:admin slurm_config
     sudo chown -R admin:admin slurm_logs 
     sudo chown -R admin:admin slurm_spool
-    sudo -u admin
 ```
 
 ### 1. Build the docker
@@ -94,7 +95,8 @@ To access the server, open this file in a browser:
         http://1b23c2e48b3c:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
         http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
 ```
-Access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
+
+Now you can access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
 
 ### 3. Run JupyterHub with Slurm
 This script is to run a jupyterhub with BricsAuthenticator and BricsSlurmSpawner.
@@ -133,18 +135,19 @@ JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
 ```
 
 Please then check the slurm log at /home/admin/ inside container
-```
+```shell
 tail -f /home/admin/jupyterhub_slurmspawner_33.log
 ```
 
 In the log, you should see following information.
+```
 To access the server, open this file in a browser:
         file:///tmp/admin/.local/share/jupyter/runtime/jpserver-17-open.html
     Or copy and paste one of these URLs:
         http://1b23c2e48b3c:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
         http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
 ```
-Access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
 
+Now you can access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
 
-(TO DO: JupyterHub redirecting JupyterNotebook is not working at the moment, so need to access it from a different browser tab, tested in Firefox)
+Caveat: JupyterHub redirecting JupyterNotebook is not working at the moment, so need to access it from a different browser tab.
