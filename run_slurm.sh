@@ -14,7 +14,8 @@ docker run --name slurm-jupyter \
     --mount type=bind,source=$PWD/jupyter_config,target=/srv/jupyterhub \
     --mount type=bind,source=$PWD/jupyter_notebooks,target=/tmp/admin/notebooks \
     --mount type=bind,source=$PWD/jupyter_bin/brics_slurm_spawner.py,target=/usr/local/bin/brics_slurm_spawner.py \
+    --mount type=bind,source=$PWD/jupyter_bin/brics_token_authenticator.py,target=/usr/local/bin/brics_token_authenticator.py \
     brics_slurm_jupyter:latest \
-    jupyterhub -f /srv/jupyterhub/jupyterhub_config_slurm.py --debug
-
+    jupyterhub -f /srv/jupyterhub/jupyterhub_config_slurm.py 
+    
 #   sleep infinity (for debugging)
