@@ -3,14 +3,18 @@ This repo runs JupyterHub in a docker, which installs Slurm and JupyterHub. The 
 
 ## design principles
 
-Have all customisation outside of container. Use different configuration files to adjust Slurm and JupyterHub for different settings.
+**Have all customisation outside of container. Use different configuration files to adjust Slurm and JupyterHub for different settings.**
 
-- use different authenticator and spawner by using different JupyterHub config files.
-- mount all folders and files when run the container.
+- **use different authenticator and spawner by using different JupyterHub config files.**
+- **mount all folders and files when run the container.**
 
-1. Star with a working Slurm docker as a base image, such as [Docker-Slurm](https://github.com/owhere/docker-slurm).
+### 1. Base image 
 
-2. Configure the Slurm as needed, to have followings folders and files outside of container to control Slurm
+Star with a working Slurm docker as a base image, such as [Docker-Slurm](https://github.com/owhere/docker-slurm).
+
+### 2. Set up folders and files for Slurm 
+
+Configure the Slurm as needed, to have followings folders and files outside of container to control Slurm
 
 ```plaintext
 ├── slurm_config/                     
@@ -23,7 +27,9 @@ Have all customisation outside of container. Use different configuration files t
     └── slurmd
 ```                 
 
-3. Install JupyterHub Dependencies in the docker but have following folders and files outside of container.
+### 3. Set up folders and files for JupyterHub
+
+Install JupyterHub Dependencies in the docker but have following folders and files outside of container.
 
 ```plaintext
 ├── jupyter_bin/         
@@ -35,13 +41,13 @@ Have all customisation outside of container. Use different configuration files t
 └── jupyter_notebooks (Optional)
 ```
 
-4. Start container with folders and files mounted.
+### 4. Start container with folders and files mounted.
 
-5. Start Slurm inside the container and monitor the jobs if using Slurm Spawner.
+### 5. Start Slurm inside the container and monitor the jobs if using Slurm Spawner.
 
 ## Try out
 
-0. Prerequisites
+### 0. Prerequisites
 
 Docker is required to use for the container. Podman is also possible, but not tested yet.
 
@@ -62,14 +68,14 @@ This user should be the owner to run JupyterHub and Slurm Service
     sudo -u admin
 ```
 
-1. Build the docker
+### 1. Build the docker
 
 ```shell
 cd brics-jupyter-slurm
 docker build -t brics_slurm_jupyter .
 ```
 
-2. Run JupyterHub without Slurm
+### 2. Run JupyterHub without Slurm
 This script is to run a jupyterhub with DummyAuthenticator and SimpleLocalProcessSpawner.
 
 ```shell
@@ -90,15 +96,16 @@ To access the server, open this file in a browser:
 ```
 Access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
 
-3. Run JupyterHub with Slurm
+### 3. Run JupyterHub with Slurm
 This script is to run a jupyterhub with BricsAuthenticator and BricsSlurmSpawner.
 
+#### Start run in a shell or VS Code Terminal
 ```shell
 bash run_slurm.sh
 ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
 ```
 
-Use another shell to access the container to start slurm
+#### Use another shell to access the container to start slurm
 ```shell
 docker exec -it slurm-jupyter bash
 slurmctld
@@ -112,7 +119,9 @@ sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      1    mix localhost
 ```
-If anything issues, please check files in slurm_log and slurm_spool.
+Please check files in slurm_log and slurm_spool to make sure everything works.
+
+#### Access JupyterHub
 
 Then you can access JupyterHub on http://127.0.0.1:38024 and login with user admin and no password needed.
 
