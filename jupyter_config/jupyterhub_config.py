@@ -28,7 +28,6 @@ c.JupyterHub.base_url = '/'
 
 # Spawner settings
 c.JupyterHub.spawner_class = 'jupyterhub.spawner.SimpleLocalProcessSpawner'
-c.Spawner.cmd = ['jupyter-lab']
 c.Spawner.args = ['--notebook-dir=/tmp/admin/notebooks', '--ip=0.0.0.0', '--allow-root']
 c.Spawner.debug = True
 c.Spawner.default_url = '/lab'
