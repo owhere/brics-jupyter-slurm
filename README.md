@@ -1,7 +1,7 @@
 # brics-jupyter-slurm
-This repo runs JupyterHub in a docker, which installs Slurm and JupyterHub. The goal is to be able to test any customisation of JupyterHub and can test it with Slurm. 
+This repo runs JupyterHub in a docker, which installs Slurm and JupyterHub. The goal is to be able to test any customisation of JupyterHub, e.g. run it with Slurm. 
 
-## design principles
+## Design principles
 
 **Have all customisation outside of container. Use different configuration files to adjust Slurm and JupyterHub for different settings.**
 
@@ -12,11 +12,11 @@ This repo runs JupyterHub in a docker, which installs Slurm and JupyterHub. The 
 
 ### 1. Base image 
 
-Star with a working Slurm docker as a base image, such as [Docker-Slurm](https://github.com/owhere/docker-slurm).
+Start with a working Slurm docker as a base image, such as [Docker-Slurm](https://github.com/owhere/docker-slurm).
 
 ### 2. Set up folders and files for Slurm 
 
-Configure the Slurm as needed, to have followings folders and files outside of container to control Slurm
+Configure the Slurm as needed, to have followings folders and files outside of the container.
 
 ```plaintext
 ├── slurm_config/                     
@@ -31,7 +31,7 @@ Configure the Slurm as needed, to have followings folders and files outside of c
 
 ### 3. Set up folders and files for JupyterHub
 
-Install JupyterHub Dependencies in the docker but have following folders and files outside of container.
+Install JupyterHub dependencies in the docker but have following folders and files outside of the container.
 
 ```plaintext
 ├── jupyter_bin/         
@@ -43,9 +43,17 @@ Install JupyterHub Dependencies in the docker but have following folders and fil
 └── jupyter_notebooks (Optional)
 ```
 
-### 4. Start container with folders and files mounted.
+### 4. Run container with folders and files mounted.
 
-### 5. Start Slurm inside the container and monitor the jobs if using Slurm Spawner.
+Use [Run Script](run.sh)
+
+### 5. Run Slurm inside the container and monitor the jobs if using Slurm Spawner.
+
+```
+slurmctld
+slurmd
+sinfo
+```
 
 ## Try out
 
@@ -59,7 +67,7 @@ Prepare a user (i.e. admin) in your host, to mimic the container set up.
     echo "admin:$6$LCWPfNvA26GTyP5p$cPpAXROBc9eOOaGRUYTrKrj1ELd5/DQy6.QtvKbzrCgeEce1Dlw2R4IZvxSvd08WGdghKQC1AKcv82wcMiHXx/" | chpasswd && \
     echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
-This user should be the owner to run JupyterHub and Slurm Service
+This user should be the owner of following folders
 
 ```
     sudo chown -R admin:admin jupter_config 
