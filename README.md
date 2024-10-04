@@ -94,18 +94,6 @@ $ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
 
 Then you can access JupyterHub on http://127.0.0.1:38024 and login with user admin and no password needed.
 
-After login, please check the terminal for the log file, to find something like:
-
-```
-To access the server, open this file in a browser:
-        file:///tmp/admin/.local/share/jupyter/runtime/jpserver-17-open.html
-    Or copy and paste one of these URLs:
-        http://1b23c2e48b3c:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
-        http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
-```
-
-Now you can access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
-
 ### 3. Run JupyterHub with Slurm
 This script is to run a jupyterhub with BricsAuthenticator and BricsSlurmSpawner.
 
