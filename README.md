@@ -63,33 +63,33 @@ Docker is required to use for the container. Podman is also possible, but not te
 
 Prepare a user (i.e. admin) in your host, to mimic the container set up.
 ```shell
-    useradd -m admin && \
-    echo "admin:$6$LCWPfNvA26GTyP5p$cPpAXROBc9eOOaGRUYTrKrj1ELd5/DQy6.QtvKbzrCgeEce1Dlw2R4IZvxSvd08WGdghKQC1AKcv82wcMiHXx/" | chpasswd && \
+$useradd -m admin && \
+    echo "admin:<hashed-password>" | chpasswd && \
     echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 This user should be the owner of following folders
 
-```
-    sudo chown -R admin:admin jupter_config 
-    sudo chown -R admin:admin jupter_notebooks
-    sudo chown -R admin:admin slurm_config
-    sudo chown -R admin:admin slurm_logs 
-    sudo chown -R admin:admin slurm_spool
+```shell
+$sudo chown -R admin:admin jupter_config 
+$sudo chown -R admin:admin jupter_notebooks
+$sudo chown -R admin:admin slurm_config
+$sudo chown -R admin:admin slurm_logs 
+$sudo chown -R admin:admin slurm_spool
 ```
 
 ### 1. Build the docker
 
 ```shell
-cd brics-jupyter-slurm
-docker build -t brics_slurm_jupyter .
+$cd brics-jupyter-slurm
+$docker build -t brics_slurm_jupyter .
 ```
 
 ### 2. Run JupyterHub without Slurm
 This script is to run a jupyterhub with DummyAuthenticator and SimpleLocalProcessSpawner.
 
 ```shell
-bash run.sh
-ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
+$bash run.sh
+$ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
 ```
 
 Then you can access JupyterHub on http://127.0.0.1:38024 and login with user admin and no password needed.
@@ -111,21 +111,16 @@ This script is to run a jupyterhub with BricsAuthenticator and BricsSlurmSpawner
 
 #### Start run in a shell or VS Code Terminal
 ```shell
-bash run_slurm.sh
-ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
+$bash run_slurm.sh
+$ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
 ```
 
 #### Use another shell to access the container to start slurm
 ```shell
-docker exec -it slurm-jupyter bash
-slurmctld
-slurmd  
-sinfo
-```
-
-You should have output like
-```shell
-sinfo
+$docker exec -it slurm-jupyter bash
+$slurmctld
+$slurmd  
+$sinfo
 PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
 debug*       up   infinite      1    mix localhost
 ```
@@ -136,15 +131,15 @@ Please check files in slurm_log and slurm_spool to make sure everything works.
 Then you can access JupyterHub on http://127.0.0.1:38024 and login with user admin and no password needed.
 
 At this point, please check the queue, you should see something like
-```
-squeue
+```shell
+$squeue
 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
     33     debug spawner-    admin  R      18:02      1 localhost
 ```
 
 Please then check the slurm log at /home/admin/ inside container
 ```shell
-tail -f /home/admin/jupyterhub_slurmspawner_33.log
+$tail -f /home/admin/jupyterhub_slurmspawner_33.log
 ```
 
 In the log, you should see following information.
@@ -159,3 +154,35 @@ To access the server, open this file in a browser:
 Now you can access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
 
 Caveat: JupyterHub redirecting JupyterNotebook is not working at the moment, so need to access it from a different browser tab.
+
+### Diagnosis
+
+1. When container starts, you can check if it is running as expected like following:
+
+```shell
+$docker ps 
+CONTAINER ID   IMAGE                        COMMAND                  CREATED        STATUS        PORTS              NAMES
+c1de9a675fe4   brics_slurm_jupyter:latest   "jupyterhub -f /srv/…"   2 hours ago   Up 2 hours   <ports-exposed>   slurm-jupyter
+```
+Make sure the port-exposed are expected.
+
+2. Check docker logs
+```shell
+$docker logs -f slurm-jupyter
+```
+
+3. To stop the docker gracefully and clean it up, use:
+```shell
+$docker stop slurm-jupyter
+$docker rm slurm-jupyter
+```
+
+4. To clean up the jobs in the queue forcefully, inside the container, use
+```shell
+$scancel -f <job-id>
+```
+
+5. Resume the node, if in drain or down state, inside the container, use
+```shell
+$scontrol update NodeName=localhost State=RESUME Reason="Manual clear of drain state"
+```
