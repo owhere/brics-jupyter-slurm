@@ -35,6 +35,7 @@ c.BricsSlurmSpawner.http_timeout = 300
 c.BricsSlurmSpawner.job_status = ['R']   # Specify the status that indicates running ('R' for Slurm)
 
 # Slurm settings
-c.BricsSlurmSpawner.batch_query_cmd = 'squeue -j {job_id}'  # Query job status
-c.BricsSlurmSpawner.batch_cancel_cmd = 'scancel {job_id}'   # Cancel job
+c.BricsSlurmSpawner.batch_submit_cmd = "sbatch --parsable" # Submit job
+c.BricsSlurmSpawner.batch_query_cmd = "squeue -h -j {job_id} -o '%T %B'"  # Query job status
+c.BricsSlurmSpawner.batch_cancel_cmd = "scancel {job_id}"   # Cancel job
 
