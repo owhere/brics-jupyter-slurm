@@ -1,26 +1,16 @@
 #! /bin/bash
 set -euo pipefail
 
-# To use an alternative container engine command, specify as first argument, e.g.
-#   run.sh podman
-# Default with no argument is to use docker
-if (( $# == 0 )); then
-  ENGINE_CMD="docker"
-elif (( $# == 1 )); then
-  ENGINE_CMD="$1"
-else
-  echo "Error: Incorrect number of arguments"
-  echo "Usage: $0 [container engine command]"
-  exit 1
-fi
+ENGINE_CMD=${CONTAINER_ENGINE_CMD:-docker}
+BIND_IP=${CONTAINER_BIND_IP:-}
 
 set -o xtrace
 
-${ENGINE_CMD} run --name jupyter-slurm \
+${ENGINE_CMD} run --rm --name jupyter-slurm \
     --privileged \
-    -p 6817:6817 -p 6818:6818 \
-    -p 38024:38024   \
-    -p 8888:8888 \
+    -p ${BIND_IP}${BIND_IP:+:}6817:6817 -p ${BIND_IP}${BIND_IP:+:}6818:6818 \
+    -p ${BIND_IP}${BIND_IP:+:}38024:38024 \
+    -p ${BIND_IP}${BIND_IP:+:}8888:8888 \
     --user root \
     --mount type=bind,source=$PWD/slurm_logs,target=/srv/slurm_logs \
     --mount type=bind,source=$PWD/slurm_config/slurm.conf,target=/etc/slurm/slurm.conf \
