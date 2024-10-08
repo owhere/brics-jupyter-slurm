@@ -11,7 +11,7 @@ c.JupyterHub.base_url = '/'
 
 # Spawner settings
 c.JupyterHub.spawner_class = 'simple'
-c.Spawner.args = []
+c.Spawner.args = ['--allow-root']
 c.Spawner.debug = True
 c.Spawner.default_url = '/lab'
 c.Spawner.ip = '0.0.0.0'
@@ -21,4 +21,3 @@ c.Spawner.http_timeout = 120
 
 # Logging
 c.JupyterHub.log_level = 'DEBUG'
-c.JupyterHub.extra_log_file = '/srv/jupyterhub/jupyterhub.log'

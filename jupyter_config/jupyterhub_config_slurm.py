@@ -1,3 +1,5 @@
+import sys
+
 sys.path.append('/opt/brics_jupyter/')
 from brics_slurm_spawner import BricsSlurmSpawner
 from brics_token_authenticator import BricsAuthenticator
@@ -33,4 +35,3 @@ c.BricsSlurmSpawner.batch_cancel_cmd = "scancel {job_id}"   # Cancel job
 
 # Logging
 c.JupyterHub.log_level = 'DEBUG'
-c.JupyterHub.extra_log_file = '/srv/jupyterhub/jupyterhub.log'
