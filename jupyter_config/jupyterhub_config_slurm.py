@@ -1,7 +1,3 @@
-import os
-import logging
-import sys
-
 sys.path.append('/opt/brics_jupyter/')
 from brics_slurm_spawner import BricsSlurmSpawner
 from brics_token_authenticator import BricsAuthenticator
@@ -10,7 +6,6 @@ from brics_token_authenticator import BricsAuthenticator
 c.JupyterHub.authenticator_class = BricsAuthenticator
 c.Authenticator.admin_users = {'admin'}
 c.Authenticator.allowed_users = {'admin'}
-c.LocalAuthenticator.create_system_users = True
 
 # URL config
 c.ConfigurableHTTPProxy.api_url = 'http://0.0.0.0:8018'
@@ -36,3 +31,6 @@ c.BricsSlurmSpawner.batch_submit_cmd = "sbatch --parsable" # Submit job
 c.BricsSlurmSpawner.batch_query_cmd = "squeue -h -j {job_id} -o '%T %B'"  # Query job status
 c.BricsSlurmSpawner.batch_cancel_cmd = "scancel {job_id}"   # Cancel job
 
+# Logging
+c.JupyterHub.log_level = 'DEBUG'
+c.JupyterHub.extra_log_file = '/srv/jupyterhub/jupyterhub.log'
