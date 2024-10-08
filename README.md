@@ -174,3 +174,13 @@ $scancel -f <job-id>
 ```shell
 $scontrol update NodeName=localhost State=RESUME Reason="Manual clear of drain state"
 ```
+
+6. Remove all untracked data files from bind-mounted directories (e.g. `slurm_spool/`)
+
+   ```shell
+   # Dry-run to see what would be deleted
+   git clean -x -d --dry-run
+
+   # Delete untracked files
+   git clean -x -d --force
+   ```
