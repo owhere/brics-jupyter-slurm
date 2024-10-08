@@ -18,8 +18,8 @@ ${ENGINE_CMD} run --rm --name jupyter-slurm \
     --mount type=bind,source=$PWD/slurm_spool/slurmctld,target=/var/spool/slurmctld \
     --mount type=bind,source=$PWD/jupyter_config,target=/srv/jupyterhub \
     --mount type=bind,source=$PWD/jupyter_notebooks,target=/tmp/admin/notebooks \
-    --mount type=bind,source=$PWD/jupyter_bin/brics_slurm_spawner.py,target=/usr/local/bin/brics_slurm_spawner.py \
-    --mount type=bind,source=$PWD/jupyter_bin/brics_token_authenticator.py,target=/usr/local/bin/brics_token_authenticator.py \
+    --mount type=bind,source=$PWD/jupyter_bin/brics_slurm_spawner.py,target=/opt/brics_jupyter/brics_slurm_spawner.py \
+    --mount type=bind,source=$PWD/jupyter_bin/brics_token_authenticator.py,target=/opt/brics_jupyter/brics_token_authenticator.py \
     brics-jupyter-slurm:latest \
     jupyterhub -f /srv/jupyterhub/jupyterhub_config_slurm.py 
 

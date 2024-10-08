@@ -2,7 +2,7 @@ import os
 import logging
 import sys
 
-sys.path.append('/usr/local/bin/') 
+sys.path.append('/opt/brics_jupyter/')
 from brics_slurm_spawner import BricsSlurmSpawner
 from brics_token_authenticator import BricsAuthenticator
 
