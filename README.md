@@ -59,7 +59,7 @@ sinfo
 
 ### 0. Prerequisites
 
-Docker is required to use for the container. Podman is also possible, but not tested yet.
+Docker is required to use for the container. Podman is also possible.
 
 Prepare a user (i.e. admin) in your host, to mimic the container set up.
 ```shell
