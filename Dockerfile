@@ -1,4 +1,4 @@
-FROM nathanhess/slurm:full-v1.1.0
+FROM docker.io/nathanhess/slurm:full-v1.1.0
 
 # Switch to root user to install additional packages
 USER root
