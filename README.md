@@ -62,11 +62,16 @@ sinfo
 Docker is required to use for the container. Podman is also possible.
 
 Prepare a user (i.e. admin) in your host, to mimic the container set up.
+
+> [!NOTE]
+> Creating a user in the host may not be necessary in all cases. For example, when testing the container in a `podman` machine on macOS, not additional user was required on the host (within the VM).
+
 ```shell
 $useradd -m admin && \
     echo "admin:<hashed-password>" | chpasswd && \
     echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
+
 This user should be the owner of following folders
 
 ```shell
