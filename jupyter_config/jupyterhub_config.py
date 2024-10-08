@@ -1,24 +1,7 @@
-import os
-import logging
-import sys
-
-from dummyauthenticator import DummyAuthenticator
-
 # Set the authenticator class to DummyAuthenticator for testing
-c.JupyterHub.authenticator_class = DummyAuthenticator
+c.JupyterHub.authenticator_class = 'dummy'
 c.Authenticator.admin_users = {'admin'}
 c.Authenticator.allowed_users = {'admin'}
-c.LocalAuthenticator.create_system_users = True
-
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-# Log the final authenticator setup
-logger.info("Using NoPasswordPAMAuthenticator for passwordless access")
-
-# Log the final authenticator setup
-logger.info("Assigned NoPasswordPAMAuthenticator")
 
 # URL config
 c.ConfigurableHTTPProxy.api_url = 'http://0.0.0.0:8018'

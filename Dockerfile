@@ -30,7 +30,7 @@ RUN useradd -m admin && \
 RUN pip3 install --upgrade pip setuptools
 
 # Install Python dependencies, including JupyterHub and JupyterLab
-RUN pip3 install --no-cache-dir jupyterhub==5.1.0 jupyterlab python-dotenv jupyterhub-dummyauthenticator batchspawner
+RUN pip3 install --no-cache-dir jupyterhub==5.1.0 jupyterlab python-dotenv batchspawner
 
 # Clean up to reduce image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
