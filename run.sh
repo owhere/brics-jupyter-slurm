@@ -7,6 +7,7 @@ BIND_IP=${CONTAINER_BIND_IP:-}
 set -o xtrace
 
 ${ENGINE_CMD} run --rm --name jupyter-slurm \
+    --privileged \
     -p ${BIND_IP}${BIND_IP:+:}38024:38024 \
     --user root \
     --mount type=bind,source=$PWD/slurm_logs,target=/srv/slurm_logs \
