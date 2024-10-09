@@ -37,7 +37,3 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory for JupyterHub
 WORKDIR /home/admin
-
-# Expose necessary ports (adjust as needed)
-EXPOSE 8000 6817 6818 8018 8018 38024
-

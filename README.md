@@ -59,32 +59,18 @@ sinfo
 
 ### 0. Prerequisites
 
-Docker is required to use for the container. Podman is also possible.
+Docker is required to use for the container. 
 
-Prepare a user (i.e. admin) in your host, to mimic the container set up.
-
-> [!NOTE]
-> Creating a user in the host may not be necessary in all cases. For example, when testing the container in a `podman` machine on macOS, not additional user was required on the host (within the VM).
+Podman is also tested in MacOS, after setting up podman with following alias.
 
 ```shell
-$useradd -m admin && \
-    echo "admin:<hashed-password>" | chpasswd && \
-    echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-```
-
-This user should be the owner of following folders
-
-```shell
-$sudo chown -R admin:admin jupter_config 
-$sudo chown -R admin:admin jupter_notebooks
-$sudo chown -R admin:admin slurm_config
-$sudo chown -R admin:admin slurm_logs 
-$sudo chown -R admin:admin slurm_spool
+alias docker=podman
 ```
 
 ### 1. Build the docker
 
 ```shell
+$git clone https://github.com/owhere/brics-jupyter-slurm.git 
 $cd brics-jupyter-slurm
 $docker build -t brics-jupyter-slurm .
 ```
@@ -94,7 +80,7 @@ This script is to run a jupyterhub with DummyAuthenticator and SimpleLocalProces
 
 ```shell
 $bash run.sh
-$ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
+$ssh -L 38024:localhost:38024 your_user@remote_host
 ```
 
 Then you can access JupyterHub on http://127.0.0.1:38024 and login with user admin and no password needed.
@@ -105,7 +91,7 @@ This script is to run a jupyterhub with BricsAuthenticator and BricsSlurmSpawner
 #### Start run in a shell or VS Code Terminal
 ```shell
 $bash run_slurm.sh
-$ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
+$ssh -L 38024:localhost:38024 your_user@remote_host
 ```
 
 #### Use another shell to access the container to start slurm
@@ -134,19 +120,6 @@ Please then check the slurm log at /home/admin/ inside container
 ```shell
 $tail -f /home/admin/jupyterhub_slurmspawner_33.log
 ```
-
-In the log, you should see following information.
-```
-To access the server, open this file in a browser:
-        file:///tmp/admin/.local/share/jupyter/runtime/jpserver-17-open.html
-    Or copy and paste one of these URLs:
-        http://1b23c2e48b3c:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
-        http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305
-```
-
-Now you can access the notebook as the URL: http://127.0.0.1:8888/lab?token=483505f29ccb8373cdb0982a9b96b40b7f286b3bf42cd305 
-
-Caveat: JupyterHub redirecting JupyterNotebook is not working at the moment, so need to access it from a different browser tab.
 
 ### Diagnosis
 
