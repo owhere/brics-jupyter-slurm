@@ -59,14 +59,19 @@ sinfo
 
 ### 0. Prerequisites
 
-Docker is required to use for the container. Podman is also possible, but not tested yet.
+Docker is required to use for the container. Podman is also possible.
 
 Prepare a user (i.e. admin) in your host, to mimic the container set up.
+
+> [!NOTE]
+> Creating a user in the host may not be necessary in all cases. For example, when testing the container in a `podman` machine on macOS, not additional user was required on the host (within the VM).
+
 ```shell
 $useradd -m admin && \
     echo "admin:<hashed-password>" | chpasswd && \
     echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
+
 This user should be the owner of following folders
 
 ```shell
@@ -81,7 +86,7 @@ $sudo chown -R admin:admin slurm_spool
 
 ```shell
 $cd brics-jupyter-slurm
-$docker build -t brics_slurm_jupyter .
+$docker build -t brics-jupyter-slurm .
 ```
 
 ### 2. Run JupyterHub without Slurm
@@ -105,7 +110,7 @@ $ssh -L 38024:localhost:38024 -L 8888:localhost:8888 your_user@remote_host
 
 #### Use another shell to access the container to start slurm
 ```shell
-$docker exec -it slurm-jupyter bash
+$docker exec -it jupyter-slurm bash
 $slurmctld
 $slurmd  
 $sinfo
@@ -150,19 +155,19 @@ Caveat: JupyterHub redirecting JupyterNotebook is not working at the moment, so 
 ```shell
 $docker ps 
 CONTAINER ID   IMAGE                        COMMAND                  CREATED        STATUS        PORTS              NAMES
-c1de9a675fe4   brics_slurm_jupyter:latest   "jupyterhub -f /srv/…"   2 hours ago   Up 2 hours   <ports-exposed>   slurm-jupyter
+c1de9a675fe4   brics-jupyter-slurm:latest   "jupyterhub -f /srv/…"   2 hours ago   Up 2 hours   <ports-exposed>   jupyter-slurm
 ```
 Make sure the port-exposed are expected.
 
 2. Check docker logs
 ```shell
-$docker logs -f slurm-jupyter
+$docker logs -f jupyter-slurm
 ```
 
 3. To stop the docker gracefully and clean it up, use:
 ```shell
-$docker stop slurm-jupyter
-$docker rm slurm-jupyter
+$docker stop jupyter-slurm
+$docker rm jupyter-slurm
 ```
 
 4. To clean up the jobs in the queue forcefully, inside the container, use
@@ -174,3 +179,13 @@ $scancel -f <job-id>
 ```shell
 $scontrol update NodeName=localhost State=RESUME Reason="Manual clear of drain state"
 ```
+
+6. Remove all untracked data files from bind-mounted directories (e.g. `slurm_spool/`)
+
+   ```shell
+   # Dry-run to see what would be deleted
+   git clean -x -d --dry-run
+
+   # Delete untracked files
+   git clean -x -d --force
+   ```
