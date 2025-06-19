@@ -1,4 +1,5 @@
 import sys
+import batchspawner
 
 sys.path.append('/opt/brics_jupyter/')
 from brics_slurm_spawner import BricsSlurmSpawner
@@ -19,14 +20,16 @@ c.JupyterHub.base_url = '/'
 c.JupyterHub.spawner_class = BricsSlurmSpawner
 
 # Configure the spawner's environment and notebook settings
-c.BricsSlurmSpawner.cmd = ['jupyterhub-singleuser']
-c.BricsSlurmSpawner.args = []
+=======
+#c.BricsSlurmSpawner.cmd = ['jupyter-lab']
+c.BricsSlurmSpawner.args = ['--notebook-dir=/tmp/admin/notebooks', '--ip=0.0.0.0', '--allow-root']
 c.BricsSlurmSpawner.debug = True
 c.BricsSlurmSpawner.default_url = '/lab'
 c.BricsSlurmSpawner.ip = '0.0.0.0'
-c.BricsSlurmSpawner.notebook_dir = '/tmp/{username}/notebooks'
-c.BricsSlurmSpawner.start_timeout = 300
-c.BricsSlurmSpawner.http_timeout = 300
+c.BricsSlurmSpawner.notebook_dir = '/tmp/admin/notebooks'
+c.BricsSlurmSpawner.start_timeout = 300  
+c.BricsSlurmSpawner.http_timeout = 300  
+c.BricsSlurmSpawner.poll_interval = 10  # Set polling interval to 10 seconds
 
 # Slurm settings
 c.BricsSlurmSpawner.batch_submit_cmd = "sbatch --parsable" # Submit job
@@ -35,3 +38,4 @@ c.BricsSlurmSpawner.batch_cancel_cmd = "scancel {job_id}"   # Cancel job
 
 # Logging
 c.JupyterHub.log_level = 'DEBUG'
+
